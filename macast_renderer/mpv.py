@@ -337,15 +337,9 @@ class MPVRenderer(Renderer):
             params = [
                 self.path,
                 '--input-ipc-server={}'.format(self.mpv_sock),
-                '--image-display-duration=inf',
                 '--idle=yes',
                 '--no-terminal',
-                '--on-all-workspaces',
-                '--hwdec=yes',
-                '--save-position-on-quit=yes',
-                '--script-opts=osc-timetotal=yes,osc-layout=bottombar,' +
-                'osc-title=${title},osc-showwindowed=yes,' +
-                'osc-seekbarstyle=bar,osc-visibility=auto'
+                '--hwdec=auto'
             ]
 
             ontop = Setting.get(SettingProperty.PlayerOntop,
