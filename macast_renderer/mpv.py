@@ -135,8 +135,6 @@ class MPVRenderer(Renderer):
 
     def set_media_text(self, data: str, duration: int = 1000):
         self.send_command(['show-text', data, duration])
-        # 发送测试
-        # self.send_command(['loadfile', 'http://vjs.zencdn.net/v/oceans.mp4', 'replace'])
     def set_media_speed(self, data: float = 1):
         """
         :param data: range(0.01 - 100)
@@ -263,9 +261,7 @@ class MPVRenderer(Renderer):
         """Sending command to mpv
         """
         logger.debug("send command: %s", str(command))
-
-        print(f"发送MPV命令: {command}")
-
+        
         data = {"command": command}
         msg = json.dumps(data) + '\n'
         with self.command_lock:
