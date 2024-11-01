@@ -98,15 +98,22 @@ class MPVRenderer(Renderer):
         self.set_media_text(f'Mute: {data}')
 
     def set_media_url(self, url, start="0"):
-        """ data : string
+        """ 设置媒体 URL 并开始播放
+        Args:
+            url (str): 媒体文件的 URL
+            start (str): 开始播放的时间点(秒)
         """
-        options = {'start': start}
+        # 1. 加载文件
+        self.send_command(['loadfile', url, 'replace'])
+        
+        # 2. 设置开始时间
+        self.send_command(['seek', start, 'absolute'])
+        
+        # 3. 根据需要设置全屏
         player_size = Setting.get(SettingProperty.PlayerSize,
-                                  default=SettingProperty.PlayerSize_Normal.value)
+                                default=SettingProperty.PlayerSize_Normal.value)
         if player_size == SettingProperty.PlayerSize_FullScreen.value:
-            options['fullscreen'] = 'yes'
-        self.send_command(['loadfile', url, 'replace',
-                           ','.join([f'{i}={options[i]}' for i in options])])
+            self.send_command(['set_property', 'fullscreen', 'yes'])
 
     def set_media_title(self, data):
         """ data : string
@@ -127,7 +134,6 @@ class MPVRenderer(Renderer):
 
     def set_media_text(self, data: str, duration: int = 1000):
         self.send_command(['show-text', data, duration])
-
     def set_media_speed(self, data: float = 1):
         """
         :param data: range(0.01 - 100)
@@ -252,7 +258,8 @@ class MPVRenderer(Renderer):
     def send_command(self, command):
         """Sending command to mpv
         """
-        logger.debug("send command: " + str(command))
+        logger.debug("send command: %s", str(command))
+        
         data = {"command": command}
         msg = json.dumps(data) + '\n'
         with self.command_lock:
@@ -262,8 +269,8 @@ class MPVRenderer(Renderer):
                 else:
                     self.ipc_sock.sendall(msg.encode())
                 return True
-            except Exception as e:
-                logger.error('sendCommand: ' + str(e))
+            except (socket.error, ConnectionError) as e:
+                logger.error('sendCommand: %s', str(e))
                 return False
 
     def start_ipc(self):
@@ -335,7 +342,6 @@ class MPVRenderer(Renderer):
             params = [
                 self.path,
                 '--input-ipc-server={}'.format(self.mpv_sock),
-                '--image-display-duration=inf',
                 '--idle=yes',
                 '--no-terminal',
                 '--hwdec=yes',
