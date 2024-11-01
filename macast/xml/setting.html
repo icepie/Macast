@@ -473,10 +473,10 @@
                     this.activeIndex = '1';
                 }
             });
-            let page = this.getQueryString('page');
-            if (!(page in ['1', '2', '3', '4'])) {
-                page = '1'
-            }
+            // let page = this.getQueryString('page');
+            // if (!(page in ['1', '2', '3', '4'])) {
+            //     page = '1'
+            // }
             console.log(page);
             this.switch_page(page);
             this.get_macast_status();

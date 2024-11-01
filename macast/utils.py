@@ -424,6 +424,12 @@ class Setting:
         log_level = LOG_LEVEL.get(Setting.log_level, 20)
         log_file = os.path.join(SETTING_DIR, 'macast.log')
         log_format = '%(levelname)s: [%(asctime)s] - %(name)s/%(funcName)s/%(threadName)s|%(thread)d[line:%(lineno)d] - %(message)s'
+        
+        # 没有路径时候创建
+        log_dir = os.path.dirname(log_file)
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        
         logging.basicConfig(
             level=log_level,
             format=log_format,

@@ -260,6 +260,9 @@ class MPVRenderer(Renderer):
         """
         logger.debug("send command: %s", str(command))
         
+        if self.ipc_sock is None:
+            return False
+
         data = {"command": command}
         msg = json.dumps(data) + '\n'
         with self.command_lock:

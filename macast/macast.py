@@ -261,10 +261,10 @@ class Macast(App):
     def build_app_menu(self):
         self.toggle_menuitem = MenuItem(_("Stop Cast"), self.on_toggle_service_click, key="p")
         self.setting_menuitem = MenuItem(_("Setting"), children=self.build_setting_menu())
-        self.advanced_menuitem = MenuItem(_("Advanced Setting"),
-                                          lambda _: self.open_browser(
-                                              'http://localhost:{}'.format(Setting.get_setting_port())),
-                                          key="k")
+        # self.advanced_menuitem = MenuItem(_("Advanced Setting"),
+        #                                   lambda _: self.open_browser(
+        #                                       'http://localhost:{}'.format(Setting.get_setting_port())),
+        #                                   key="k")
         self.quit_menuitem = MenuItem(_("Quit"), self.quit, key="q")
         return [
             self.toggle_menuitem,
@@ -603,7 +603,7 @@ def gui(renderer=None, protocol=None):
     Setting.setup_logger()
 
     # start setting http server
-    SettingService().run()
+    # SettingService().run()
 
     lang = get_lang()
     if renderer is None:
@@ -619,7 +619,7 @@ def cli(renderer=None, protocol=None):
     Setting.setup_logger()
 
     # start setting http server
-    SettingService().run()
+    # SettingService().run()
 
     if renderer is None:
         renderer = MPVRenderer(path=Setting.mpv_default_path)
