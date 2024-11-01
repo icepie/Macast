@@ -21,7 +21,7 @@
 
 <div id="app" v-cloak>
     <el-tabs v-model="activeIndex" @tab-click="handleSelect">
-        <el-tab-pane :label=$t("message.Plugin") name="1">
+        <el-tab-pane :label="Plugin" name="1">
             <div class="macast-plugins">
                 <macast-plugin v-for="item in plugins" :key="item.renderer"
                                :item="item" v-on:refresh_plugin="refresh_plugin">
@@ -29,7 +29,7 @@
                 <p v-if="loading">loading</p>
             </div>
             <div class="macast-plugin-shortcut">
-                <el-tooltip class="item" effect="dark" :content=$t("message.plugin_tip_folder")
+                <el-tooltip class="item" effect="dark" :content="Open Config Directory"
                             placement="left">
                     <el-button class="macast-plugin-shortcut-item" circle v-on:click="open_folder">
                         <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="folder-open" role="img"
@@ -42,7 +42,7 @@
                     </el-button>
                 </el-tooltip>
                 <a :href="this.repo_url" target="_blank">
-                    <el-tooltip class="item" effect="dark" :content=$t("message.plugin_tip_repo")
+                    <el-tooltip class="item" effect="dark" :content="View on GitHub"
                                 placement="left">
 
                         <el-button class="macast-plugin-shortcut-item" circle>
@@ -59,7 +59,7 @@
             </div>
 
         </el-tab-pane>
-        <el-tab-pane :label=$t("message.Setting") name="2">
+        <el-tab-pane label="Setting" name="2">
 
             <el-collapse value="1" accordion>
                 <el-collapse-item name="1">
@@ -85,18 +85,18 @@
                     <p v-if="!is_json">json format error</p>
                 </el-collapse-item>
             </el-collapse>
-            <el-tooltip class="item" effect="dark" :content=$t("message.restart_tip") placement="right">
+            <el-tooltip class="item" effect="dark" :content="Restart" placement="right">
                 <el-button :loading="connecting"
                            :disabled="!is_json"
                            v-on:click="save_launch_param"
                            round
-                           style="margin-top: 10px">{{$t("message.Save")}}
+                           style="margin-top: 10px">Save
                 </el-button>
             </el-tooltip>
 
 
         </el-tab-pane>
-        <el-tab-pane :label=$t("message.Log") name="3">
+        <el-tab-pane label="Log" name="3">
 
             <br/>
             <br/>
@@ -104,7 +104,7 @@
             {{item.index}} | {{item.content}}
             </pre>
         </el-tab-pane>
-        <el-tab-pane :label=$t("message.Help") name="4">
+        <el-tab-pane label="Help" name="4">
 
             <h1>FAQ</h1>
 
@@ -495,20 +495,20 @@
             }
         },
         methods: {
-            async loadLanguage(language) {
-                if (loadedLanguages.includes(language)) {
-                    console.log("Already include language!")
-                    return
-                }
-                await this.$http.get(`/assets/setting_i18n/${language}.json`).then(res => {
-                    i18n.setLocaleMessage(language, {message: res.data})
-                    loadedLanguages.push(language)
-                    i18n.locale = language;
-                    i18n.fallbackLocale = 'en_US';
-                }).catch(err => {
-                    console.log('Using default language: en_US')
-                })
-            },
+            // async loadLanguage(language) {
+            //     if (loadedLanguages.includes(language)) {
+            //         console.log("Already include language!")
+            //         return
+            //     }
+            //     await this.$http.get(`/assets/setting_i18n/${language}.json`).then(res => {
+            //         i18n.setLocaleMessage(language, {message: res.data})
+            //         loadedLanguages.push(language)
+            //         i18n.locale = language;
+            //         i18n.fallbackLocale = 'en_US';
+            //     }).catch(err => {
+            //         console.log('Using default language: en_US')
+            //     })
+            // },
             getQueryString(name) {
                 let reg = `(^|&)${name}=([^&]*)(&|$)`
                 let r = window.location.search.substr(1).match(reg);
@@ -628,7 +628,7 @@
             async get_macast_status() {
                 let url = '/api/server_status'
                 return this.$http.get(url).then(res => {
-                    this.loadLanguage(res.data.lang);
+                    // this.loadLanguage(res.data.lang);
                     return res.data.status
                 }).catch(err => {
                     return false;
